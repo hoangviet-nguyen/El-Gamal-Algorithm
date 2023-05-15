@@ -14,8 +14,8 @@ public class KeyGenerator {
     public BigInteger randomBigInt(BigInteger range){
         BigInteger result;
         do {
-            result = new BigInteger(range.subtract(new BigInteger("1")).bitLength(), random);
-        } while (result.compareTo(range) > 0);
+            result = new BigInteger(range.bitLength(), random);
+        } while (result.compareTo(range) >= 0 || result.equals(new BigInteger("0")));
 
         return result;
     }

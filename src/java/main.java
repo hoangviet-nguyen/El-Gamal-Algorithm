@@ -1,3 +1,5 @@
+import key.generator.KeyGenerator;
+
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -6,10 +8,13 @@ import static key.generator.HexString.HEX_STRING;
 public class main {
 
     public static void main(String[] args) {
-        Random random = new Random();
+        KeyGenerator generator = new KeyGenerator();
 
-        BigInteger test = new BigInteger(HEX_STRING.getHexString(), 16);
-        System.out.println(test);
+        //BigInteger test = new BigInteger(HEX_STRING.getHexString(), 16);
+        //System.out.println(test);
+        for (int i = 0; i<15;i++){
+            System.out.println(generator.randomBigInt(new BigInteger("5")).toString());
 
+        }
     }
 }
