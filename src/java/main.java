@@ -26,129 +26,119 @@ public class main {
         do {
             input = menu();
             switch (input) {
-            case 2 -> {
-                BigInteger[] KeyPairB = generator.generateKeyPair();
-                try (FileWriter wr = new FileWriter("sk.txt");
-                     FileWriter wr2 = new FileWriter("pk.txt")) {
+                case 2 -> {
+                    BigInteger[] KeyPairB = generator.generateKeyPair();
+                    try (FileWriter wr = new FileWriter("sk.txt");
+                         FileWriter wr2 = new FileWriter("pk.txt")) {
 
-                    wr.write(KeyPairB[0].toString()); // private
-                    wr2.write(KeyPairB[1].toString()); // public
-                    System.out.println("öffentlicher und privater Schlüssel erfolgreich gespeichert");
+                        wr.write(KeyPairB[0].toString()); // private
+                        wr2.write(KeyPairB[1].toString()); // public
+                        System.out.println("öffentlicher und privater Schlüssel erfolgreich gespeichert");
 
-                } catch (IOException ee) {
-                    System.out.println("Fehler beim Speichern der Datei");
-                    throw new RuntimeException(ee);
-                }
-            }
-            case 3 -> {
-                String publicKey = "";
-                Scanner reader;
-                String toEncrypt = "";
-
-                try {
-                    File textFile = new File("pk.txt");
-                    reader = new Scanner(textFile);
-                    while (reader.hasNextLine()) {
-                        publicKey = reader.nextLine();
+                    } catch (IOException ee) {
+                        System.out.println("Fehler beim Speichern der Datei");
+                        throw new RuntimeException(ee);
                     }
-                } catch (FileNotFoundException e) {
-                    System.out.println("fehler beim Lesen der Datei");
-                    throw new RuntimeException(e);
                 }
+                case 3 -> {
+                    String publicKey = "";
+                    Scanner reader;
+                    String toEncrypt = "";
 
-                try {
-                    File textFile = new File("text.txt");
-                    reader = new Scanner(textFile);
-                    while (reader.hasNextLine()) {
-                        toEncrypt = reader.nextLine();
+                    try {
+                        File textFile = new File("pk.txt");
+                        reader = new Scanner(textFile);
+                        while (reader.hasNextLine()) {
+                            publicKey = reader.nextLine();
+                        }
+                    } catch (FileNotFoundException e) {
+                        System.out.println("fehler beim Lesen der Datei");
+                        throw new RuntimeException(e);
                     }
-                } catch (FileNotFoundException e) {
-                    System.out.println("fehler beim Lesen der Datei");
-                    throw new RuntimeException(e);
-                }
-                System.out.println(toEncrypt);
-                BigInteger key = new BigInteger(publicKey);
 
-
-                try (FileWriter wr = new FileWriter("chiffre.txt")) {
-                    for (Character s : toEncrypt.toCharArray()) {
-                        BigInteger[] keyPair = generator.generateKeyPair();
-                        BigInteger verschlüsselt = generator.generateY2(key, keyPair[0], s);
-                        wr.write("(" + keyPair[1].toString() + "," + verschlüsselt.toString() + ");");
+                    try {
+                        File textFile = new File("text.txt");
+                        reader = new Scanner(textFile);
+                        while (reader.hasNextLine()) {
+                            toEncrypt = reader.nextLine();
+                        }
+                    } catch (FileNotFoundException e) {
+                        System.out.println("fehler beim Lesen der Datei");
+                        throw new RuntimeException(e);
                     }
-                } catch (IOException ee) {
-                    System.out.println("Fehler beim speichern der Datei");
-                    throw new RuntimeException(ee);
-                }
-                System.out.println("erfolgreich verschlüsselt");
-            }
+                    System.out.println(toEncrypt);
+                    BigInteger key = new BigInteger(publicKey);
 
 
-            case 4 -> {
-                Scanner reader;
-                List<List<String>> encrypted = new ArrayList<>();
-                String privateKeyString = "";
-                String raw = "";
-                try {
-
-                    reader = new Scanner(new File("sk.txt"));
-                    privateKeyString = reader.nextLine();
-                    reader = new Scanner(new File("chiffre.txt"));
-
-                    reader.useDelimiter(";");
-                    while (reader.hasNextLine()) {
-                        raw = reader.nextLine();
+                    try (FileWriter wr = new FileWriter("chiffre.txt")) {
+                        for (Character s : toEncrypt.toCharArray()) {
+                            BigInteger[] keyPair = generator.generateKeyPair();
+                            BigInteger verschlüsselt = generator.generateY2(key, keyPair[0], s);
+                            wr.write("(" + keyPair[1].toString() + "," + verschlüsselt.toString() + ");");
+                        }
+                        wr.flush();
+                    } catch (IOException ee) {
+                        System.out.println("Fehler beim speichern der Datei");
+                        throw new RuntimeException(ee);
                     }
-                } catch (FileNotFoundException e) {
-                    System.out.println("fehler beim Lesen der Datei");
-                    throw new RuntimeException(e);
+                    System.out.println("erfolgreich verschlüsselt");
                 }
 
+                case 4 -> {
+                    Scanner reader;
+                    List<String> encrypted;
+                    String privateKeyString = "";
+                    List<List<String>> characters = new ArrayList<>();
+                    try {
 
-                String[] pairStrings = raw.split(";");
-                for (String pairString : pairStrings) {
-                    String[] values = pairString.replaceAll("\\(", "").replaceAll("\\)", "").split(",");
-                    List<String> pair = new ArrayList<>(Arrays.asList(values));
-                    encrypted.add(pair);
-                }
-                //System.out.println(encrypted.get(0).get(0));
-                //System.out.println(encrypted.get(0).get(1));
+                        reader = new Scanner(new File("sk.txt"));
+                        privateKeyString = reader.nextLine();
+                        reader = new Scanner(new File("chiffre.txt"));
+                        String raw = reader.nextLine();
+                        encrypted = Arrays.stream(raw.substring(1, raw.length() -1).split(";"))
+                                .toList();
 
-                //System.out.println(encrypted.get(1).get(0));
-                //System.out.println(encrypted.get(1).get(1));
+                        for (String values: encrypted) {
+                            characters.add(Arrays.stream(values.replaceAll("\\(", "").
+                                    replaceAll("\\)", "").split(",")).toList());
+                        }
 
-                ArrayList<Character> ausgabe = new ArrayList<>();
-                BigInteger privateKey = new BigInteger(privateKeyString);
-
-                for (List<String> character : encrypted) {
-                    char decrypted =
-                        generator.decrypt(new BigInteger(character.get(0)), new BigInteger(character.get(1)),
-                            privateKey);
-                    System.out.println(decrypted);
-                    ausgabe.add(decrypted);
-                }
-
-                try {
-                    FileWriter wr = new FileWriter(("text-d.txt"));
-                    for (Character character : ausgabe) {
-                        wr.write(character);
+                    } catch (FileNotFoundException e) {
+                        System.out.println("fehler beim Lesen der Datei");
+                        throw new RuntimeException(e);
                     }
-                    wr.flush();
-                    wr.close();
-                    System.out.println("Dateien wurde erfolgreich entschlüsselt");
 
-                } catch (IOException ee) {
-                    System.out.println("fehler beim speichern der Datei");
-                    throw new RuntimeException(ee);
+                    ArrayList<Character> ausgabe = new ArrayList<>();
+                    BigInteger privateKey = new BigInteger(privateKeyString);
+
+                    for (List<String> values: characters) {
+                        char decrypted = generator.decrypt(new BigInteger(values.get(0)), new BigInteger(values.get(1)),privateKey);
+                        System.out.println(decrypted);
+                        ausgabe.add(decrypted);
+                    }
+
+
+
+                    try {
+                        FileWriter wr = new FileWriter(("text-d.txt"));
+                        for (Character character : ausgabe) {
+                            wr.write(character);
+                        }
+                        wr.flush();
+                        wr.close();
+                        System.out.println("Dateien wurde erfolgreich entschlüsselt");
+
+                    } catch (IOException ee) {
+                        System.out.println("fehler beim speichern der Datei");
+                        throw new RuntimeException(ee);
+                    }
                 }
-            }
 
-            default -> System.out.println("ungültige Auswahl");
+                default -> System.out.println("ungültige Auswahl");
             }
         } while (input != 5);
 
     }
-
     private static int menu() {
         scanner = new Scanner(System.in);
         System.out.println("Bitte wählen Sie eine Option aus:");
