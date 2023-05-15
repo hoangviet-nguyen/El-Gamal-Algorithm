@@ -133,6 +133,7 @@ public class main {
                         throw new RuntimeException(ee);
                     }
                 }
+                case 5 -> System.out.println("Auf wiedersehen");
 
                 default -> System.out.println("ungültige Auswahl");
             }
