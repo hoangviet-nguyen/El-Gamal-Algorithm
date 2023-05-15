@@ -22,8 +22,9 @@ public class KeyGenerator {
         return result;
     }
 
+
     public BigInteger generateY2(BigInteger y1, BigInteger exponentB,int msg){
-        BigInteger sharedKey = y1.modPow(exponentB, new BigInteger(HEX_STRING.getHexString()));
+        BigInteger sharedKey = y1.modPow(exponentB, new BigInteger(HEX_STRING.getHexString(),16));
         BigInteger encryptedMSG = sharedKey.multiply(new BigInteger(String.valueOf(msg)));
         return encryptedMSG.mod(new BigInteger(HEX_STRING.getHexString()));
     }
