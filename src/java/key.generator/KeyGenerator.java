@@ -1,6 +1,7 @@
 package key.generator;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static key.generator.HexString.HEX_STRING;
@@ -8,12 +9,17 @@ import static key.generator.HexString.HEX_STRING;
 public class KeyGenerator {
     private Random random = new Random();
 
-    public BigInteger generateY1(){
-        return null;
+    public BigInteger[] generateY1(){
+        BigInteger[] array = new BigInteger[2];
+        BigInteger g = new BigInteger("2");
+        array[1]  = randomBigInt();                  //Vorgabe von Aufgabe, Erzeuger 2
+        array[0] =  g.modPow(array[1], new BigInteger(HEX_STRING.getHexString(), 16));
+        return array;
     }
 
 
-    public BigInteger randomBigInt(BigInteger range){
+    public BigInteger randomBigInt(){
+        BigInteger range = new BigInteger(HEX_STRING.getHexString(), 16);
         BigInteger result;
         do {
             result = new BigInteger(range.bitLength(), random);
