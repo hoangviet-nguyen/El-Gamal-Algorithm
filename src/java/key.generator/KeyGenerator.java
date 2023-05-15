@@ -13,7 +13,7 @@ public class KeyGenerator {
         BigInteger[] array = new BigInteger[2];
         BigInteger g = new BigInteger("2");                                                    //Vorgabe von Aufgabe, Erzeuger 2
         array[1]  = randomBigInt();                                                                //Private Key
-        array[0] =  g.modPow(array[1], new BigInteger(HEX_STRING.getHexString(), 16));       // Öffentlicher Key
+        array[0] =  g.modPow(array[1], new BigInteger(HEX_STRING.getHexString(), 16));        //Öffentlicher Key
         return array;
     }
 
