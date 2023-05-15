@@ -10,10 +10,15 @@ public class main {
     public static void main(String[] args) {
         KeyGenerator generator = new KeyGenerator();
 
+        BigInteger test = new BigInteger(HEX_STRING.getHexString(),16);
+        System.out.println(test);
+        //for (int i = 0; i<15;i++){
+          //  System.out.println(generator.randomBigInt(new BigInteger("5")).toString());
         //BigInteger test = new BigInteger(HEX_STRING.getHexString(), 16);
         //System.out.println(test);
 
 
+        //}
 
     }
 }
