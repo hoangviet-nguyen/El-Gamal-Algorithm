@@ -1,7 +1,5 @@
 package key.generator;
 
-import java.security.SecureRandom;
-
 public enum HexString {
 
     HEX_STRING("FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1" +
@@ -17,8 +15,8 @@ public enum HexString {
             "15728E5A8AACAA68FFFFFFFFFFFFFFFF");
 
 
-
     private final String hexString;
+
     HexString(String hexString) {
         this.hexString = hexString;
     }
