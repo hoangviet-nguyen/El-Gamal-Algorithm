@@ -29,6 +29,7 @@ public class KeyGenerator {
 
 
     public BigInteger generateY2(BigInteger publicKey, BigInteger exponentA, int msg) {
+        //generiert Y2(verschlüsselt den text)
         BigInteger sharedKey = publicKey.modPow(exponentA, new BigInteger(HEX_STRING.getHexString(), 16));
         BigInteger encryptedMSG = sharedKey.multiply(new BigInteger(String.valueOf(msg)));
         return encryptedMSG.mod(new BigInteger(HEX_STRING.getHexString(), 16));
