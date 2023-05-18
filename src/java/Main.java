@@ -69,13 +69,15 @@ public class Main {
 
                 BigInteger privateKey = new BigInteger(privateKeyString);
 
-                for (List<String> val : characters) { //entschlüsselung jedes chars
+                //entschlüsselung jedes chars
+                for (List<String> val : characters) {
                     char decrypted =
                         generator.decrypt(new BigInteger(val.get(0)), new BigInteger(val.get(1)),
                             privateKey);
                     //System.out.println(decrypted);
                     ausgabe.add(decrypted);
                 }
+
                 StringBuilder output = new StringBuilder();
                 for (Character character : ausgabe) {
                     output.append(character);
@@ -97,6 +99,7 @@ public class Main {
     private static int menu() {
         //menü Konzept aus der ersten Programmieraufgabe übernommen
         scanner = new Scanner(System.in);
+        System.out.print("\n");
         System.out.println("Bitte wählen Sie eine Option aus:");
         System.out.print(" 2. Schlüsselgenerierung |");
         System.out.print(" 3. Verschlüsselung |");
