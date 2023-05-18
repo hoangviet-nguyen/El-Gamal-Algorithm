@@ -4,6 +4,11 @@ import java.util.Scanner;
 
 public class IOHelper {
 
+    /**
+     * reads a file and returns the content as a String
+     * @param file the file to read
+     */
+
     public static String readFile(String file) {
         String text = "";
         try {
@@ -25,6 +30,12 @@ public class IOHelper {
         return text;
     }
 
+    /**
+     * writes a String to a file
+     *
+     * @param text String to write
+     * @param file filename to write to
+     */
     public static void writeFile(String text, String file) {
         try {
             java.io.FileWriter myWriter = new java.io.FileWriter(file);

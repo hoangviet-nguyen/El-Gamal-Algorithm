@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class main {
+public class Main {
     public static Scanner scanner;
     public static int input;
 
@@ -37,8 +37,8 @@ public class main {
                     //verschlüsselung des textes
                     for (Character s : toEncrypt.toCharArray()) {
                         BigInteger[] keyPair = generator.generateKeyPair();
-                        BigInteger verschlüsselt = generator.generateY2(key, keyPair[0], s);
-                        wr.write("(" + keyPair[1].toString() + "," + verschlüsselt.toString() + ");");
+                        BigInteger encrypted = generator.generateY2(key, keyPair[0], s);
+                        wr.write("(" + keyPair[1].toString() + "," + encrypted.toString() + ");");
                     }
                     wr.flush();
                 } catch (IOException ee) {
@@ -69,19 +69,19 @@ public class main {
 
                 BigInteger privateKey = new BigInteger(privateKeyString);
 
-                for (List<String> values_ : characters) { //entschlüsselung jedes chars
+                for (List<String> val : characters) { //entschlüsselung jedes chars
                     char decrypted =
-                        generator.decrypt(new BigInteger(values_.get(0)), new BigInteger(values_.get(1)),
+                        generator.decrypt(new BigInteger(val.get(0)), new BigInteger(val.get(1)),
                             privateKey);
                     //System.out.println(decrypted);
                     ausgabe.add(decrypted);
                 }
-                String output = "";
+                StringBuilder output = new StringBuilder();
                 for (Character character : ausgabe) {
-                    output += character;
+                    output.append(character);
                 }
 
-                IOHelper.writeFile(output, "text-d.txt");
+                IOHelper.writeFile(output.toString(), "text-d.txt");
                 System.out.println("Output: " + output);
                 System.out.println("Erfolgreich entschlüsselt");
             }

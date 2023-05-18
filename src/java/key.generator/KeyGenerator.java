@@ -8,6 +8,10 @@ import static key.generator.HexString.HEX_STRING;
 public class KeyGenerator {
     private final Random random = new Random();
 
+    /**
+     *
+     * @return BigInteger array with the private key at index 0 and the public key at index 1
+     */
     public BigInteger[] generateKeyPair() {
         BigInteger[] array = new BigInteger[2];
         BigInteger g = new BigInteger("2");
@@ -16,7 +20,10 @@ public class KeyGenerator {
         return array;
     }
 
-
+    /**
+     * Generates a random BigInteger with the same bit length as the given BigInteger
+     * @return random BigInteger
+     */
     public BigInteger randomBigInt() {
         BigInteger range = new BigInteger(HEX_STRING.getHexString(), 16);
         BigInteger result;
@@ -27,6 +34,13 @@ public class KeyGenerator {
         return result;
     }
 
+    /**
+     *
+     * @param publicKey  public key of the receiver
+     * @param exponentA private key of the sender
+     * @param msg message to encrypt, takes char value
+     * @return encrypted message as BigInteger
+     */
 
     public BigInteger generateY2(BigInteger publicKey, BigInteger exponentA, int msg) {
         //generiert Y2(verschlüsselt den text)
@@ -35,6 +49,13 @@ public class KeyGenerator {
         return encryptedMSG.mod(new BigInteger(HEX_STRING.getHexString(), 16));
     }
 
+    /**
+     *
+     * @param y1  public key of the sender
+     * @param y2  encrypted message
+     * @param privateKey private key of the receiver
+     * @return  decrypted message as char
+     */
     public char decrypt(BigInteger y1, BigInteger y2, BigInteger privateKey) {
         BigInteger shared = y1.modPow(privateKey, new BigInteger(HEX_STRING.getHexString(), 16));
         BigInteger message = shared.modInverse(new BigInteger(HEX_STRING.getHexString(), 16));
