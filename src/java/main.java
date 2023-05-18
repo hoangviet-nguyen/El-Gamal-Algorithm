@@ -24,6 +24,8 @@ public class main {
 
                 IOHelper.writeFile(KeyPairB[0].toString(), "sk.txt");
                 IOHelper.writeFile(KeyPairB[1].toString(), "pk.txt");
+
+                System.out.println("Schlüssel generiert, sk.txt private key, pk.txt public key");
             }
             case 3 -> { //Verschlüsselung
                 String publicKey = IOHelper.readFile("pk.txt");
@@ -47,44 +49,45 @@ public class main {
             }
 
             case 4 -> { //Entschlüsselung
-                Scanner reader;
                 List<String> encrypted;
                 String privateKeyString = IOHelper.readFile("sk.txt");
                 String raw = IOHelper.readFile("chiffre.txt"); //lesen des verschlüsselten Text
                 List<List<String>> characters = new ArrayList<>();
 
+
+                //splitten der (Y1,Y2);(Y1,Y2); zu separaten (Y1,Y2)
                 encrypted = Arrays.stream(raw.substring(1, raw.length() - 1)
-                        .split(";")) //splitten der (Y1,Y2);(Y1,Y2); zu separaten (Y1,Y2)
+                        .split(";"))
                     .toList();
 
-                for (String values : encrypted) {  //splitten der (Y1,Y2) zu werten Y1 und Y2 , entfernung der Klammern
+                ArrayList<Character> ausgabe = new ArrayList<>();
+                //splitten der (Y1,Y2) zu werten Y1 und Y2 , entfernung der Klammern
+                for (String values : encrypted) {
                     characters.add(Arrays.stream(values.replaceAll("\\(", "").
                         replaceAll("\\)", "").split(",")).toList());
-
-
-                    ArrayList<Character> ausgabe = new ArrayList<>();
-                    BigInteger privateKey = new BigInteger(privateKeyString);
-
-                    for (List<String> values_ : characters) { //entschlüsselung jedes chars
-                        char decrypted =
-                            generator.decrypt(new BigInteger(values_.get(0)), new BigInteger(values_.get(1)),
-                                privateKey);
-                        System.out.println(decrypted);
-                        ausgabe.add(decrypted);
-                    }
-                    String output = "";
-                    for (Character character : ausgabe) {
-                        output += character;
-                    }
-
-                    IOHelper.writeFile(output, "text-d.txt");
-                    System.out.println("output: " + output);
-                    System.out.println("erfolgreich entschlüsselt");
                 }
+
+                BigInteger privateKey = new BigInteger(privateKeyString);
+
+                for (List<String> values_ : characters) { //entschlüsselung jedes chars
+                    char decrypted =
+                        generator.decrypt(new BigInteger(values_.get(0)), new BigInteger(values_.get(1)),
+                            privateKey);
+                    //System.out.println(decrypted);
+                    ausgabe.add(decrypted);
+                }
+                String output = "";
+                for (Character character : ausgabe) {
+                    output += character;
+                }
+
+                IOHelper.writeFile(output, "text-d.txt");
+                System.out.println("Output: " + output);
+                System.out.println("Erfolgreich entschlüsselt");
             }
             case 5 -> System.out.println("Auf wiedersehen");
 
-            default -> System.out.println("ungültige Auswahl");
+            default -> System.out.println("Ungültige Auswahl");
             }
         }
         while (input != 5);
