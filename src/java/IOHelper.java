@@ -6,6 +6,7 @@ public class IOHelper {
 
     /**
      * reads a file and returns the content as a String
+     *
      * @param file the file to read
      */
 
